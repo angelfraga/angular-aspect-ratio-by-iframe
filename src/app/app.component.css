@@ -1,36 +1,33 @@
-p {
-  font-family: Lato;
+:host {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
 }
 
-iframe { 
-  border: 0;
-  width: 100%;
-  height: 100%;
+.header {
+  height: 48px;
+  background: red;
 }
 
 .layout {
   display: flex;
   flex-direction: row;
   height: 100%;
+  flex: 1;
 }
 .sidebar {
-  background: red;
+  border-right: 1px solid rgba(0,0,0,0.2);
   width: 300px;
 }
 .main { 
   flex: 1; position: relative;
-  align-items: middle
+  align-items: middle;
+  padding: 16px;
 }
 
-.aspect-ratio[data-ratio="9/16"] {
-  background: silver;
-  width: 100vw; 
-  height: 56.25vw; /* 100/56.25 = 1.778 */
-  background: pink;
-  max-height: 100%;
-  max-width: 177.78vh; /* 16/9 = 1.778 */
-  margin: auto;
-  position: absolute;
-  top:0;bottom:0; /* vertical center */
-  left:0;right:0; /* horizontal center */
+iframe { 
+  border: 0;
+  width: 100%;
+  height: 100%;
 }
