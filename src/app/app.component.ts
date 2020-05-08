@@ -20,7 +20,7 @@ export class AppComponent  implements AfterViewInit {
           max-width: 177.78vh; /* 16/9 = 1.778 */
           margin: auto;
           position: absolute;
-          top:0;bottom:0; /* vertical center */
+          top:0; /* vertical center */
           left:0;right:0; /* horizontal center */
         }
       </style>
