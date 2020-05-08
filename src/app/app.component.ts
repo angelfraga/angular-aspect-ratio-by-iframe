@@ -1,4 +1,4 @@
-import { Component, VERSION, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, VERSION, ViewChild, AfterViewInit, ElementRef, HostBinding } from '@angular/core';
 
 @Component({
   selector: 'my-app',
@@ -6,6 +6,9 @@ import { Component, VERSION, ViewChild, AfterViewInit, ElementRef } from '@angul
   styleUrls: [ './app.component.css' ]
 })
 export class AppComponent  implements AfterViewInit {
+
+  @HostBinding('class.collapsed') collapsed;
+
   @ViewChild('aspectRatio') aspectRatio: ElementRef<HTMLIFrameElement>;
 
   ngAfterViewInit() {

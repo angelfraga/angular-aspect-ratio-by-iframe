@@ -5,6 +5,10 @@
   flex-direction: column;
 }
 
+:host.collapsed {
+  --sidebar-width: 64px;
+}
+
 .header {
   height: 48px;
   background: red;
@@ -12,7 +16,7 @@
 
 .logo { 
   height: 100%;
-  width: 300px;
+  width: var(--sidebar-width);
   border-right: 1px solid white;
 }
 
@@ -24,7 +28,7 @@
 }
 .sidebar {
   border-right: 1px solid rgba(0,0,0,0.2);
-  width: 300px;
+  width: var(--sidebar-width);
 }
 .main { 
   flex: 1;
