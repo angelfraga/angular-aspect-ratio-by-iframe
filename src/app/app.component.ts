@@ -35,7 +35,13 @@ export class AppComponent  implements AfterViewInit {
     this.aspectRatio.nativeElement.contentDocument.body.appendChild(aspectRatio)
 
     this.aspectRatio.nativeElement.contentWindow.onresize = () => {
-      this.mask.nativeElement.style.width = aspectRatio.clientWidth + 'px';
+      const coords = aspectRatio.getBoundingClientRect();
+      this.mask.nativeElement.style.width = coords.width + 'px';
+      this.mask.nativeElement.style.height = coords.height + 'px';
+      this.mask.nativeElement.style.top = coords.top + 'px';
+      this.mask.nativeElement.style.bottom = coords.bottom + 'px';
+      this.mask.nativeElement.style.left = coords.left + 'px';
+      this.mask.nativeElement.style.right = coords.right + 'px';
     }
   }
 }
