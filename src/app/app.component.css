@@ -50,13 +50,15 @@
   box-sizing: border-box;
 }
 
-.iframe-wrapper {
+.wrapper {
   flex: 1;
   width: calc(100% - 32px);
   margin: 16px;
   position: relative;
   border: 1px solid grey;
   box-sizing: content-box;
+  display: flex;
+  flex-direction: row;
 }
 
 button {
