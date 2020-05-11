@@ -1,4 +1,4 @@
-import { Component, ViewChild,AfterViewInit, ElementRef, HostBinding, OnDestroy, Input } from  '@angular/core';
+import { Component, ViewChild,AfterViewInit, ElementRef, HostBinding, OnDestroy, Input, Output, EventEmitter } from  '@angular/core';
 import { fromEvent, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -12,6 +12,8 @@ export class AspectRatioComponent implements AfterViewInit, OnDestroy {
 
   @ViewChild('aspectRatioFrame') aspectRatioFrame: ElementRef<HTMLIFrameElement>;
   @ViewChild('mask') mask: ElementRef<HTMLDivElement>;
+
+  @Output() resized = new EventEmitter<ClientRect | DOMRect>();
 
   componentDestroyed$ = new Subject();
 
@@ -43,9 +45,9 @@ export class AspectRatioComponent implements AfterViewInit, OnDestroy {
 
     fromEvent(this.aspectRatioFrame.nativeElement.contentWindow, 'resize').pipe(
       takeUntil(this.componentDestroyed$)
-    ).subscribe(() => this.resizeMask(this.mask.nativeElement, aspectRatio));
+    ).subscribe(() => this.resizeMask(this.mask.nativeElement, aspectRatio, this.resized));
 
-    this.resizeMask(this.mask.nativeElement, aspectRatio);
+    this.resizeMask(this.mask.nativeElement, aspectRatio, this.resized);
     }, 100)
   }
 
@@ -54,7 +56,11 @@ export class AspectRatioComponent implements AfterViewInit, OnDestroy {
     this.componentDestroyed$.complete();
   }
 
-  resizeMask(mask: HTMLDivElement, aspectRatio: HTMLDivElement) {
+  resizeMask(
+    mask: HTMLDivElement,
+    aspectRatio: HTMLDivElement, 
+    eventEmitter: EventEmitter<ClientRect | DOMRect>
+  ) {
     const coords = aspectRatio.getBoundingClientRect();
     mask.style.width = coords.width + 'px';
     mask.style.height = coords.height + 'px';
@@ -62,6 +68,7 @@ export class AspectRatioComponent implements AfterViewInit, OnDestroy {
     mask.style.bottom = coords.bottom + 'px';
     mask.style.left = coords.left + 'px';
     mask.style.right = coords.right + 'px';
+    eventEmitter.emit(coords)
   }
 
 }
