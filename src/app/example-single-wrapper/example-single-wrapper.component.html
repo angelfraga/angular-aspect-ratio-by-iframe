@@ -1,0 +1,20 @@
+    <div class="editor-nav">
+      <span>Ratio:</span>
+      <select [(ngModel)]="ratio">
+        <option value="16/9"> 16:9 </option>
+        <option value="4/3"> 4:3 </option>
+        <option value="3/2"> 3:2 </option>
+      </select>
+      <b> {{ ratio }} </b> 
+      <span>Align:</span>
+      <select [(ngModel)]="align">
+        <option value="center"> Center </option>
+        <option value="center center"> Center Center </option>
+      </select>
+      <b> {{ align }} </b> 
+    </div>
+    <div class="wrapper">
+      <app-aspect-ratio [ratio]="ratio" [align]="align">
+        ok
+      </app-aspect-ratio>
+    </div>

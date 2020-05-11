@@ -13,6 +13,6 @@ iframe {
 
 .aspect-ratio-mask {
   position: absolute;
-  background: rgba(0,0,0,0.05);
+  background: pink;
   box-sizing: content-box;
 }
