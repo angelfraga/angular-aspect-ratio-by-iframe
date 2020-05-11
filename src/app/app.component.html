@@ -14,8 +14,8 @@
     </div>
     <div class="wrapper">
       <div>
-        <app-aspect-ratio>
-          ok
+        <app-aspect-ratio (resized)="resizeElement($event, canvas)">
+          <canvas #canvas></canvas>
         </app-aspect-ratio>
       </div>
       <div>
