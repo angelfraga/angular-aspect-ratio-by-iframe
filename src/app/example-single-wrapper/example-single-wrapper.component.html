@@ -5,13 +5,13 @@
         <option value="4/3"> 4:3 </option>
         <option value="3/2"> 3:2 </option>
       </select>
-      <b> {{ ratio }} </b> 
       <span>Align:</span>
       <select [(ngModel)]="align">
         <option value="center"> Center </option>
         <option value="center center"> Center Center </option>
+        <option value="center top"> Center Top </option>
+        <option value="center bottom"> Center bottom </option>
       </select>
-      <b> {{ align }} </b> 
     </div>
     <div class="wrapper">
       <app-aspect-ratio [ratio]="ratio" [align]="align">

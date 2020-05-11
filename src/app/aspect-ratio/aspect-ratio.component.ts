@@ -73,6 +73,16 @@ export class AspectRatioComponent implements AfterViewInit, OnDestroy {
         left: 0;
         right: 0;
       }
+      .aspect-ratio[data-align="center top"] {
+        left: 0;
+        right: 0;
+        top: 0;
+      }
+      .aspect-ratio[data-align="center bottom"] {
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
       .aspect-ratio[data-ratio="16/9"] {
         height: 56.25vw;
         max-width: 177.78vh; /* 16/9 = 1.778 */
