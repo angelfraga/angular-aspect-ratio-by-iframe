@@ -1,0 +1,11 @@
+iframe { 
+  height: 100%;
+  width: 100%;
+  border: 0;
+}
+
+.aspect-ratio-mask {
+  position: absolute;
+  background: rgba(0,0,0,0.05);
+  box-sizing: content-box;
+}
