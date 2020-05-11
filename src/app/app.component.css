@@ -59,6 +59,10 @@
   box-sizing: content-box;
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+}
+.wrapper > *  {
+  flex: 1;
 }
 
 button {
