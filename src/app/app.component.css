@@ -54,6 +54,9 @@
   flex: 1;
   width: calc(100% - 32px);
   margin: 16px;
+  position: relative;
+  border: 1px solid grey;
+  box-sizing: content-box;
 }
 
 button {
@@ -73,4 +76,11 @@ iframe {
   height: 100%;
   width: 100%;
   border: 0;
+}
+
+.aspect-ratio-mask {
+  position: absolute;
+  background: rgba(0,0,0,0.05);
+  border: 1px solid black;
+  box-sizing: content-box;
 }

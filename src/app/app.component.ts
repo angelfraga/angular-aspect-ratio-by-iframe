@@ -10,8 +10,12 @@ export class AppComponent  implements AfterViewInit {
   @HostBinding('class.collapsed') collapsed;
 
   @ViewChild('aspectRatio') aspectRatio: ElementRef<HTMLIFrameElement>;
+  @ViewChild('mask') mask: ElementRef<HTMLDivElement>;
 
   ngAfterViewInit() {
+    const aspectRatio = window.document.createElement('div');
+    aspectRatio.classList.add('aspect-ratio');
+    aspectRatio.setAttribute('data-ratio', '9/16');
     this.aspectRatio.nativeElement.contentDocument.body.innerHTML = `
       <style>
         .aspect-ratio[data-ratio="9/16"] {
@@ -27,7 +31,11 @@ export class AppComponent  implements AfterViewInit {
           left:0;right:0; /* horizontal center */
         }
       </style>
-      <div class="aspect-ratio" data-ratio="9/16"></div>
     `;
+    this.aspectRatio.nativeElement.contentDocument.body.appendChild(aspectRatio)
+
+    this.aspectRatio.nativeElement.contentWindow.onresize = () => {
+      this.mask.nativeElement.style.width = aspectRatio.clientWidth + 'px';
+    }
   }
 }
