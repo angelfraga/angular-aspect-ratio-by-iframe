@@ -11,7 +11,7 @@ export class AppComponent  implements AfterViewInit, OnDestroy {
 
   @HostBinding('class.collapsed') collapsed;
 
-  @ViewChild('aspectRatio') aspectRatio: ElementRef<HTMLIFrameElement>;
+  @ViewChild('aspectRatioFrame') aspectRatioFrame: ElementRef<HTMLIFrameElement>;
   @ViewChild('mask') mask: ElementRef<HTMLDivElement>;
 
   componentDestroyed$ = new Subject();
@@ -20,7 +20,7 @@ export class AppComponent  implements AfterViewInit, OnDestroy {
     const aspectRatio = window.document.createElement('div');
     aspectRatio.classList.add('aspect-ratio');
     aspectRatio.setAttribute('data-ratio', '9/16');
-    this.aspectRatio.nativeElement.contentDocument.body.innerHTML = `
+    this.aspectRatioFrame.nativeElement.contentDocument.body.innerHTML = `
       <style>
         .aspect-ratio[data-ratio="9/16"] {
           background: silver;
@@ -36,9 +36,9 @@ export class AppComponent  implements AfterViewInit, OnDestroy {
         }
       </style>
     `;
-    this.aspectRatio.nativeElement.contentDocument.body.appendChild(aspectRatio)
+    this.aspectRatioFrame.nativeElement.contentDocument.body.appendChild(aspectRatio)
 
-    fromEvent(this.aspectRatio.nativeElement.contentWindow, 'resize').pipe(
+    fromEvent(this.aspectRatioFrame.nativeElement.contentWindow, 'resize').pipe(
       takeUntil(this.componentDestroyed$)
     ).subscribe(() => this.resizeMask(this.mask.nativeElement, aspectRatio));
 
