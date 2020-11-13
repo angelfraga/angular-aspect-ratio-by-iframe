@@ -9,7 +9,9 @@ This mechanism is very helpful for:
 
 ![center-center-height-overflow][center-center-height-overflow]
 
-[Edit on StackBlitz ⚡️](https://stackblitz.com/edit/angular-aspect-ratio-by-iframe)
+[Demo on StackBlitz ⚡️](https://angular-aspect-ratio-by-iframe.stackblitz.io/)
+
+Note: resize the window in both directions: vertically and horizontally.
 
 
 
