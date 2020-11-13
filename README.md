@@ -1,6 +1,11 @@
 # angular-aspect-ratio-by-iframe
 
-This is an example of using an iframe in order to have a **fully responsive(*)** aspect-ratio element.
+This is an example of using an iframe in order to have a **fully responsive(*)** aspect-ratio element which imitates the tipical displayed video area.
+
+This mechanism is very helpful for:
+ - if we have to draw over a video element. Since the *displayed video area* is already calculated,
+  the video element will always fit with the aspect ratio. Or in other words, our canvas and *displayed video area* sizes will be identical*.
+ - if we have to keep an element always visible taking the maximun of the remaining space vertically and horizontally fitting with the given aspect ratio.
 
 ![center-center-height-overflow][center-center-height-overflow]
 
