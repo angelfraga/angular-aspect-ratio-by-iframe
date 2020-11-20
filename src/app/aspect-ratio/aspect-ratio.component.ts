@@ -1,56 +1,88 @@
-import { Component, ViewChild,AfterViewInit, ElementRef, HostBinding, OnDestroy, Input, Output, EventEmitter } from  '@angular/core';
-import { fromEvent, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import {
+  Component,
+  ViewChild,
+  AfterViewInit,
+  ElementRef,
+  HostBinding,
+  OnDestroy,
+  Input,
+  Output,
+  EventEmitter
+} from "@angular/core";
+import { BehaviorSubject, combineLatest, fromEvent, Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
-  selector: 'app-aspect-ratio',
-  templateUrl: './aspect-ratio.component.html',
-  styleUrls: ['./aspect-ratio.component.css']
+  selector: "app-aspect-ratio",
+  templateUrl: "./aspect-ratio.component.html",
+  styleUrls: ["./aspect-ratio.component.css"]
 })
 export class AspectRatioComponent implements AfterViewInit, OnDestroy {
-  aspectRatio = window.document.createElement('div') as HTMLDivElement;
-  style = window.document.createElement('style') as HTMLStyleElement;
+  aspectRatio = window.document.createElement("div") as HTMLDivElement;
+  style = window.document.createElement("style") as HTMLStyleElement;
 
   @Input() set ratio(ratio: string) {
-    this.aspectRatio.setAttribute('data-ratio', ratio);
-    if(this.mask) {
-      this.resizeMask(this.mask.nativeElement, this.aspectRatio, this.resized);
-    }
+    const [numerator, denominator] = (ratio || "16/9").split("/");
+    this.numerator = parseInt(numerator, 10);
+    this.denominator = parseInt(denominator, 10);
+  }
+
+  numerator$ = new BehaviorSubject<number>(16);
+  @Input() set numerator(numerator: number) {
+    this.numerator$.next(numerator);
+  }
+  denominator$ = new BehaviorSubject<number>(9);
+  @Input() set denominator(denominator: number) {
+    this.denominator$.next(denominator);
   }
 
   @Input() set align(align: string) {
-    this.aspectRatio.setAttribute('data-align', align);
-    if(this.mask) {
+    this.aspectRatio.setAttribute("data-align", align);
+    if (this.mask) {
       this.resizeMask(this.mask.nativeElement, this.aspectRatio, this.resized);
     }
   }
 
   @Output() resized = new EventEmitter<ClientRect | DOMRect>();
 
-  @ViewChild('aspectRatioFrame') aspectRatioFrame: ElementRef<HTMLIFrameElement>;
-  @ViewChild('mask') mask: ElementRef<HTMLDivElement>;
+  @ViewChild("aspectRatioFrame") aspectRatioFrame: ElementRef<
+    HTMLIFrameElement
+  >;
+  @ViewChild("mask") mask: ElementRef<HTMLDivElement>;
 
   componentDestroyed$ = new Subject();
 
   constructor() {
-    this.ratio = '16/9';
-    this.align = 'center';
+    this.ratio = "16/9";
+    this.align = "center";
   }
 
   ngAfterViewInit() {
     setTimeout(() => {
-    this.aspectRatio.classList.add('aspect-ratio');
-    this.aspectRatioFrame.nativeElement.contentDocument.body.appendChild(this.style);
-    this.aspectRatioFrame.nativeElement.contentDocument.body.appendChild(this.aspectRatio);
+      this.aspectRatio.classList.add("aspect-ratio");
+      this.aspectRatioFrame.nativeElement.contentDocument.body.appendChild(
+        this.style
+      );
+      this.aspectRatioFrame.nativeElement.contentDocument.body.appendChild(
+        this.aspectRatio
+      );
 
-    fromEvent(this.aspectRatioFrame.nativeElement.contentWindow, 'resize').pipe(
-      takeUntil(this.componentDestroyed$)
-    ).subscribe(() => this.resizeMask(this.mask.nativeElement, this.aspectRatio, this.resized));
+      fromEvent(this.aspectRatioFrame.nativeElement.contentWindow, "resize")
+        .pipe(takeUntil(this.componentDestroyed$))
+        .subscribe(() =>
+          this.resizeMask(
+            this.mask.nativeElement,
+            this.aspectRatio,
+            this.resized
+          )
+        );
 
-    this.resizeMask(this.mask.nativeElement, this.aspectRatio, this.resized);
+      this.resizeMask(this.mask.nativeElement, this.aspectRatio, this.resized);
     }, 100);
 
-    this.style.textContent = `
+    combineLatest([this.numerator$, this.denominator$]).subscribe(
+      ([numerator, denominator]) => {
+        this.style.textContent = `
       html, body {
         margin: 0;
         padding: 0;
@@ -59,8 +91,12 @@ export class AspectRatioComponent implements AfterViewInit, OnDestroy {
       .aspect-ratio {
         margin: auto;
         position: absolute;
+        --numerator: ${numerator};
+        --denominator: ${denominator};
+        max-width: 100%;
         max-height: 100%;
-        width: 100vw;
+        height: calc(1vw * var(--denominator) / var(--numerator) * 100);
+        width: calc(1vh * var(--numerator) / var(--denominator) * 100);
       }
 
       .aspect-ratio[data-align="center center"] {
@@ -83,19 +119,15 @@ export class AspectRatioComponent implements AfterViewInit, OnDestroy {
         right: 0;
         bottom: 0;
       }
-      .aspect-ratio[data-ratio="16/9"] {
-        height: 56.25vw;
-        max-width: 177.78vh; /* 16/9 = 1.778 */
+    `;
+
+        this.resizeMask(
+          this.mask.nativeElement,
+          this.aspectRatio,
+          this.resized
+        );
       }
-      .aspect-ratio[data-ratio="4/3"] {
-        height: 75vw;
-        max-width: 133.33vh; /* 4/3 = 1.33 */
-      }
-      .aspect-ratio[data-ratio="3/2"] {
-        height: 66.66vw;
-        max-width: 150vh; /* 3/2 = 1.5 */
-      }
-    `
+    );
   }
 
   ngOnDestroy() {
@@ -105,17 +137,16 @@ export class AspectRatioComponent implements AfterViewInit, OnDestroy {
 
   resizeMask(
     mask: HTMLDivElement,
-    aspectRatio: HTMLDivElement, 
+    aspectRatio: HTMLDivElement,
     eventEmitter: EventEmitter<ClientRect | DOMRect>
   ) {
     const coords = aspectRatio.getBoundingClientRect();
-    mask.style.width = coords.width + 'px';
-    mask.style.height = coords.height + 'px';
-    mask.style.top = coords.top + 'px';
-    mask.style.bottom = coords.bottom + 'px';
-    mask.style.left = coords.left + 'px';
-    mask.style.right = coords.right + 'px';
-    eventEmitter.emit(coords)
+    mask.style.width = coords.width + "px";
+    mask.style.height = coords.height + "px";
+    mask.style.top = coords.top + "px";
+    mask.style.bottom = coords.bottom + "px";
+    mask.style.left = coords.left + "px";
+    mask.style.right = coords.right + "px";
+    eventEmitter.emit(coords);
   }
-
 }
